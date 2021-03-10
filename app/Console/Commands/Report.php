@@ -16,7 +16,7 @@ class Report extends Command
     public function handle()
     {
 
-        $query = Account::select('account_name')->withCount('tests');
+        $query = Account::select('account_id','account_name')->withCount('tests');
 
         $order = $this->argument('order');
         if (!is_null($order) &&  strtolower($order) === 'desc') {
@@ -33,7 +33,7 @@ class Report extends Command
                     table: {
 
                         body: [
-                            ['Account Name', 'Tests Count'],
+                            ['Account ID','Account Name', 'Tests Count'],
                             {report_data}
 
                         ]
@@ -48,7 +48,7 @@ class Report extends Command
 
         $account_data = "";
         foreach ($tests_for_account as $item) {
-            $account_data .= "\n[\"$item->account_name\",\"$item->tests_count\"],";
+            $account_data .= "\n[\"$item->account_id\",\"$item->account_name\",\"$item->tests_count\"],";
         }
 
         $generated_content = str_replace("{report_data}",$account_data,$generated_content);
